@@ -1,4 +1,5 @@
 const express = require('express');
+const upload = require('express-fileupload');
 const app = express();
 const { HOST, SERVER_PORT, CLIENT_PORT } = require('./constants');
 const cookieParser = require('cookie-parser')
@@ -10,6 +11,7 @@ require('./middlewares/passport')
 
 //Innitialize middleware
 app.use(express.json());
+app.use(upload());
 app.use(cookieParser())
 app.use(cors({ origin: `http://${HOST}:${CLIENT_PORT}`, credentials: true }))
 app.use(passport.initialize());
@@ -19,8 +21,8 @@ const authRoutes = require('./routes/authentication');
 const docRoutes = require('./routes/documents');
 
 //Initialize routes
-app.use('/', authRoutes)
-app.use('/', docRoutes);
+app.use('/api', authRoutes)
+app.use('/api', docRoutes);
 
 // Start server
 const startServer = () => {

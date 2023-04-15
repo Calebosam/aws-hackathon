@@ -19,12 +19,17 @@ const options = {
 passport.use(
     new Strategy(options, async ({ id }, done) => {
         try {
-            const { rows } = await db.query("SELECT user_uid, email, role FROM users WHERE user_uid = $1", [id])
+            const { rows } = await db.query("SELECT user_uid, first_name, last_name, email, is_verified, is_admin, created_at, updated_at FROM users WHERE user_uid = $1", [id])
             if (!rows.length) { 
                 throw new Error('401 not authorized.')
             }
 
-            let user = {id: rows[0].user_id, email: rows[0].email}
+            const verificationStatus = rows[0].is_verified
+            if (!verificationStatus) {
+                throw new Error('Email not verified')
+            }
+
+            let user = rows[0]
             return await done(null, user)
         } catch (error) {
             console.error(error.message)
