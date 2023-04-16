@@ -1,11 +1,13 @@
 const db = require('../db');
 const { hash } = require('bcryptjs')
 const { sign } = require('jsonwebtoken')
-const { ROLE, SECRET } = require('../constants')
+const { SECRET } = require('../constants')
+const { sendEmailConfirmation } = require('../utilities/nodemailer')
 
+//Get all users
 exports.getUsers = async (req, res) => {
     try {
-        const { rows } = await db.query("SELECT user_uid, first_name, last_name, email, role, verified, document_uid, created_at FROM users")
+        const { rows } = await db.query("SELECT user_uid, first_name, last_name, email, is_verified, verification_token, reset_password_token, reset_password_token_expiry, is_admin, created_at, updated_at FROM users")
         res.status(res.statusCode).json({ success: true, users: rows })
     } catch (error) {
         console.error(error.message);
@@ -13,12 +15,15 @@ exports.getUsers = async (req, res) => {
     }
 }
 
+//Register user
 exports.register = async (req, res) => {
     const { first_name, last_name, email, password } = req.body;
-    const role = ROLE
     try {
+        const verificationToken = await sign({ email }, SECRET)
+        sendEmailConfirmation(`${first_name} ${last_name}`, email, verificationToken);
+
         const hashedPassword = await hash(password, 10);
-        await db.query('INSERT INTO users (user_uid, first_name, last_name, email, password, role) VALUES(uuid_generate_v4(), $1, $2, $3, $4, $5)', [first_name, last_name, email, hashedPassword, role])
+        await db.query('INSERT INTO users (first_name, last_name, email, password_hash, verification_token) VALUES($1, $2, $3, $4, $5)', [first_name, last_name, email, hashedPassword, verificationToken])
         return res.status(res.statusCode).json({
             success: true, message: 'Registration successfull.',
         });
@@ -30,16 +35,19 @@ exports.register = async (req, res) => {
     }
 }
 
+//Login user
 exports.login = async (req, res) => {
     const { user } = req
-    payload = {
+
+    const payload = {
         id: user.user_uid,
         firstName: user.first_name,
         lastName: user.last_name,
         email: user.email,
-        role: user.role,
-        created_at: user.created_at,
-        document_uid: user.document_uid
+        isVerified: user.is_verified,
+        isAdmin: user.is_admin,
+        createdAt: user.created_at,
+        updatedAt: user.updated_at
     }
 
     try {
@@ -57,6 +65,17 @@ exports.login = async (req, res) => {
     }
 }
 
+//Get  current user information
+exports.getCurrentUser = async (req, res) => {
+    try {
+        const user = await req.user
+        return res.status(res.statusCode).json(user);
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+
+//Logout user
 exports.logout = async (req, res) => {
     try {
         return res.status(res.statusCode).clearCookie('token', { httpOnly: true }).json({
@@ -68,5 +87,20 @@ exports.logout = async (req, res) => {
         return res.status(res.statusCode).json({
             error: error.message
         })
+    }
+}
+
+//Verify Email
+exports.verifyEmail = async (req, res) => {
+    try {
+        const { user_uid } = req.user;
+        await db.query('UPDATE users SET verification_token = null, is_verified = true WHERE user_uid = $1', [user_uid])
+
+        return res.status(res.statusCode).json({
+            success: true,
+            message: 'Email verified'
+        })
+    } catch (error) {
+        console.error(error.message)
     }
 }

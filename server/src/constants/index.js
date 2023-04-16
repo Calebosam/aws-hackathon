@@ -15,5 +15,8 @@ module.exports = {
     SECRET: process.env.SECRET,
 
     /* Misc variables */
-    ROLE: process.env.ROLE
+    EMAIL_SMTP: process.env.EMAIL_SMTP,
+    EMAIL_ADDRESS: process.env.EMAIL_ADDRESS,
+    EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
+    SMTP_PORT: process.env.SMTP_PORT,
 }

@@ -28,13 +28,19 @@ const loginFieldsCheck = check('email').custom(async (value, {req}) => {
     const { rows } = await db.query('SELECT * FROM users WHERE email = $1', [value])
     
     if (!rows.length) {
-        throw new Error('Invalid email address.')
+        throw new Error('Invalid email address')
     }
 
-    const validPassword = await compare(req.body.password, rows[0].password)
+    const validPassword = await compare(req.body.password, rows[0].password_hash)
 
     if (!validPassword) { 
         throw new Error('Invalid password')
+    }
+    
+    const verificationStatus = rows[0].is_verified
+    
+    if (!verificationStatus) {
+        throw new Error('Email not verified')
     }
 
     req.user = rows[0]
@@ -42,5 +48,5 @@ const loginFieldsCheck = check('email').custom(async (value, {req}) => {
 
 module.exports = {
     registerValidation: [firstName, lastName, email, password, emailExists],
-    loginValidation: [loginFieldsCheck]
+    loginValidation: [loginFieldsCheck],
 }
