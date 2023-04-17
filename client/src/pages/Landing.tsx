@@ -45,7 +45,11 @@ function LandingPage() {
         <nav className="pt-20">
           <div className="logo flex items-end">
             <img src={logo} alt="Lizo File Server Logo" className="h-[46px] mr-1" />
-            <h3 className="text-4xl font-[1000] tracking-wide leading-[0.6]">IZO</h3>
+            <h3 className="text-4xl font-[1000] tracking-wide leading-[0.3]">
+              IZO
+              <br />
+              <small className="text-[9px] font-normal">FILE SERVER</small>
+            </h3>
           </div>
         </nav>
 
