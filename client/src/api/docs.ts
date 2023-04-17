@@ -20,3 +20,7 @@ export async function onDownload(id: String, name: string) {
     fileDownload(response.data, name)
   });
 }
+
+export async function onDelete(id: String) {
+  return await axios.delete(`http://localhost:8000/api/delete/${id}`)
+}

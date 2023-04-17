@@ -1,3 +1,4 @@
+const fs = require('fs');
 const db = require('../db');
 
 exports.getDocuments = async (req, res) => {
@@ -12,7 +13,9 @@ exports.getDocuments = async (req, res) => {
 
 exports.postDocument = async (req, res) => {
     if (!req.files) {
-        throw new Error('No files added')
+        //throw new Error('No files added')
+        return res.status(404).json({ message: 'No files added' })
+
     }
     const file = req.files.document;
     const fileName = file.name;
@@ -24,8 +27,6 @@ exports.postDocument = async (req, res) => {
                 //res.send(err);
                 console.log(err);
             } else {
-                console.log('Successfully uploaded')
-
                 const filePath = `./uploads/${fileName}`;
                 db.query('INSERT INTO files (title, description, file_path, user_id) values ($1, $2, $3, $4)', [data.title, data.description, filePath, data.user_uid])
             }
@@ -33,6 +34,25 @@ exports.postDocument = async (req, res) => {
         return res.status(res.statusCode).json({ success: true, message: 'File uploaded successfully' })
     } catch (error) {
         return res.status(res.statusCode).json({ message: error.message })
+    }
+}
+
+exports.deleteFile = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const { rows } = await db.query('SELECT file_path FROM files WHERE file_uid = $1', [id])
+        if (!rows) {
+            console.log('Filepath not found')
+        }
+
+        fs.unlink(rows[0].file_path, async function () {
+            await db.query('DELETE FROM files WHERE file_uid = $1', [id]);
+            res.status(res.statusCode).json({
+                message: 'File deleted successfully'
+            })
+        })
+    } catch (error) {
+        console.error(error.message)
     }
 }
 
