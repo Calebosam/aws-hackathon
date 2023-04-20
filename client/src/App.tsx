@@ -7,7 +7,6 @@ import Landing from "./pages/Landing";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import { getUser } from "./redux/slices/authSlice";
-import { getDocumentsData } from "./api/docs";
 
 const ProtectedRoutes = () => {
   const { isLoggedIn } = useSelector((state: any) => state); // Save state to storage

@@ -123,6 +123,15 @@ button:focus-visible {
   animation-duration: 3.2s !important;
 }
 
+.options-btn {
+  transform: rotate(0deg);
+  transition: transform 0.5s;
+}
+
+.rotate {
+  transform: rotate(180deg);
+  transition: transform 0.5s;
+}
 @keyframes swing {
   20% {
     transform: rotate(15deg);
