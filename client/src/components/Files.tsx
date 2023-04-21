@@ -6,18 +6,24 @@ import { FileData } from "../interfaces/Document";
 import Moment from "moment";
 import { getUser } from "../redux/slices/authSlice";
 
-export const Files = () => {
+type Props = {
+  state: {
+    query: string;
+    files: any;
+  };
+  setState: Function;
+};
+
+export const Files = ({ state, setState }: Props) => {
   const dispatch = useDispatch<any>();
 
   const { user } = useSelector((state: any) => state);
-  const { files } = useSelector((state: any) => state);
-  const [state, setState] = useState(files);
   const [recipientEmail, setRecipientEmail] = useState("");
 
   const downloadFile = async (id: string, name: string) => {
     name = name.replace(/^.*[\\\/]/, "");
     await onDownload(id, name);
-    let copy = [...state];
+    let copy = [...state.files];
     copy = copy.map((file) => {
       if (file.file_uid === id) {
         file = { ...file, num_downloads: file.num_downloads + 1 };
@@ -45,7 +51,7 @@ export const Files = () => {
 
   const deleteFile = async (id: String) => {
     await onDelete(id);
-    let copy = [...state];
+    let copy = [...state.files];
     copy = copy.filter((x) => x.file_uid !== id);
     setState(copy);
     await dispatch(getUser());
@@ -78,7 +84,7 @@ export const Files = () => {
 
   return (
     <div className="flex flex-wrap iems-center justify-between w-full">
-      {state.map((file: FileData, index: any) => {
+      {state.files.map((file: FileData, index: any) => {
         return (
           <div
             className="w-[460px] min-w-[32%] h-[260px] flex flex-col justify-between border-2 rounded-xl px-5 py-3 my-4"
