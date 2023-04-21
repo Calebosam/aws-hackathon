@@ -21,6 +21,10 @@ export async function onDownload(id: String, name: string) {
   });
 }
 
+export async function onSendFile(data: {}) {
+  return await axios.post(`http://localhost:8000/api/send/`, data)
+}
+
 export async function onDelete(id: String) {
   return await axios.delete(`http://localhost:8000/api/delete/${id}`)
 }

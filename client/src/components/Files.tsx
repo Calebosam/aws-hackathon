@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { onDelete, onDownload } from "../api/docs";
+import { onDelete, onDownload, onSendFile } from "../api/docs";
 import { useDispatch, useSelector } from "react-redux";
 import { copy } from "../assets/hero";
 import { FileData } from "../interfaces/Document";
@@ -12,10 +12,35 @@ export const Files = () => {
   const { user } = useSelector((state: any) => state);
   const { files } = useSelector((state: any) => state);
   const [state, setState] = useState(files);
+  const [recipientEmail, setRecipientEmail] = useState("");
 
-  const downloadFile = async (id: String, name: string) => {
+  const downloadFile = async (id: string, name: string) => {
     name = name.replace(/^.*[\\\/]/, "");
     await onDownload(id, name);
+    let copy = [...state];
+    copy = copy.map((file) => {
+      if (file.file_uid === id) {
+        file = { ...file, num_downloads: file.num_downloads + 1 };
+      }
+
+      return file;
+    });
+
+    setState(copy);
+    await dispatch(getUser());
+  };
+
+  const sendFile = async (e: any, id: string) => {
+    e.preventDefault();
+    const data = {
+      user_uid: user.user_uid,
+      file_uid: id,
+      recipientEmail,
+    };
+    await onSendFile(data);
+    setRecipientEmail("");
+    closeRecipient(`${id}-send`);
+    await dispatch(getUser());
   };
 
   const deleteFile = async (id: String) => {
@@ -34,6 +59,20 @@ export const Files = () => {
     } else if (element) {
       element.style.display = "flex";
       e.target.classList.add("rotate");
+    }
+  };
+
+  const openRecipient = (id: string) => {
+    let element = document.getElementById(id);
+    if (element) {
+      element.style.transform = "translateX(0px)";
+    }
+  };
+
+  const closeRecipient = (id: string) => {
+    let element = document.getElementById(id);
+    if (element) {
+      element.style.transform = "translateX(100%)";
     }
   };
 
@@ -110,7 +149,7 @@ export const Files = () => {
             <div className="desc mb-2">
               <span>{file.description.substring(0, 170)}...</span>
             </div>
-            <div className="w-full actions flex justify-between items-center">
+            <div className="w-full h-[40px] actions relative flex justify-between items-center overflow-hidden">
               {user.is_admin ? (
                 <div className="min-w-[45%] flex items-center">
                   <span className="font-bold flex mr-5">
@@ -173,7 +212,10 @@ export const Files = () => {
                     />
                   </svg>
                 </button>
-                <button className="bg-transparent flex p-0 ml-5 text-sm">
+                <button
+                  className="bg-transparent flex p-0 ml-5 text-sm"
+                  onClick={() => openRecipient(`${file.file_uid}-send`)}
+                >
                   Send&ensp;
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -190,6 +232,36 @@ export const Files = () => {
                     />
                   </svg>
                 </button>
+              </div>
+              <div
+                className="send_file flex items-center absolute w-full px-[1px] translate-x-full transition  rounded-full bg-gray-900"
+                id={`${file.file_uid}-send`}
+              >
+                <form onSubmit={(e) => sendFile(e, file.file_uid)} className="">
+                  <input
+                    type="email"
+                    className="w-full rounded-full p-2 text-center text-white bg-transparent"
+                    value={recipientEmail}
+                    onChange={(e) => setRecipientEmail(e.target.value)}
+                    placeholder="Enter recipient email and press enter to send."
+                  />
+                </form>
+                <span
+                  className="w-[30px] h-[30px] rounded-full bg-white flex items-center justify-center cursor-pointer font-bold"
+                  title="close"
+                  onClick={() => closeRecipient(`${file.file_uid}-send`)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={3}
+                    stroke="currentColor"
+                    className="w-4 h-4"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </span>
               </div>
             </div>
           </div>

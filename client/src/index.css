@@ -118,6 +118,10 @@ button:focus-visible {
 	margin-left: -11px;
 }
 
+.send_file form{
+  width: calc(100% - 35px);
+}
+
 /* Animations */
 .slow {
   animation-duration: 3.2s !important;
