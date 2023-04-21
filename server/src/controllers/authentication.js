@@ -20,7 +20,7 @@ exports.register = async (req, res) => {
     const { first_name, last_name, email, password } = req.body;
     try {
         const verificationToken = await sign({ email }, SECRET)
-        sendEmailConfirmation(`${first_name} ${last_name}`, email, verificationToken);
+        await sendEmailConfirmation(`${first_name} ${last_name}`, email, verificationToken);
 
         const hashedPassword = await hash(password, 10);
         await db.query('INSERT INTO users (first_name, last_name, email, password_hash, verification_token) VALUES($1, $2, $3, $4, $5)', [first_name, last_name, email, hashedPassword, verificationToken])

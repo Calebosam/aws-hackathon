@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { onUpload } from "../api/docs";
+import { getUser } from "../redux/slices/authSlice";
 
 const baseStyle = {
   flex: 1,
@@ -39,8 +40,8 @@ type Props = {
 };
 
 export const UploadFile = ({ isModalOpen, setIsModalOpen }: Props) => {
+  const dispatch = useDispatch<any>();
   const { user } = useSelector((state: any) => state);
-  const { files } = useSelector((state: any) => state);
 
   // ------------Drag n Drop------------
   const { acceptedFiles, getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } = useDropzone({
@@ -91,7 +92,6 @@ export const UploadFile = ({ isModalOpen, setIsModalOpen }: Props) => {
   const [isFileErrorMessage, setFileErrorMessage] = useState(false);
   const uploadFile = async (e: any) => {
     e.preventDefault();
-    console.log("fff", acceptedFiles);
     if (!acceptedFiles[0]) {
       setFileErrorMessage(true);
     } else {
@@ -103,7 +103,7 @@ export const UploadFile = ({ isModalOpen, setIsModalOpen }: Props) => {
 
       await onUpload(formData);
       setIsModalOpen(!isModalOpen);
-      //dispatch(getDocumentsData());
+      await dispatch(getUser());
     }
   };
 

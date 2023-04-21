@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const { EMAIL_SMTP, SMTP_PORT, EMAIL_ADDRESS, EMAIL_PASSWORD } = require('../constants');
+const { EMAIL_SMTP, SMTP_PORT, CLIENT_PORT, EMAIL_ADDRESS, EMAIL_PASSWORD } = require('../constants');
 
 const transport = nodemailer.createTransport({
     pool: true,
@@ -13,7 +13,6 @@ const transport = nodemailer.createTransport({
 })
 
 exports.sendEmailConfirmation = async (name, email, confirmationCode) => {
-    console.log("Check");
     await transport.sendMail({
         from: `Lizo File Server <${EMAIL_ADDRESS}>`,
         to: email,
@@ -23,5 +22,18 @@ exports.sendEmailConfirmation = async (name, email, confirmationCode) => {
         <p>Thank you for subscribing. Please confirm your email by clicking on the following link</p>
         <a href=http://localhost:8000/verify-email/${confirmationCode}> Click here</a>
         </div>`,
+    }).catch(err => console.log(err));
+}
+
+exports.sendFileUtility = async (name, email, attachment, fileTitle) => {
+    await transport.sendMail({
+        from: `Lizo File Server <${EMAIL_ADDRESS}>`,
+        to: email,
+        subject: fileTitle,
+        html: `<h1>${name} shared this file with you.</h1>
+        <h2>Hi there,</h2>
+        <p>You have received a file from <a href="http://localhost:${CLIENT_PORT}">Lizo File Server</a>. </p>
+        </div>`,
+        attachments: [attachment]
     }).catch(err => console.log(err));
 }

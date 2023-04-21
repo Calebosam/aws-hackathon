@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import logo from "../assets/logo_alt.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { logOutUser } from "../redux/slices/authSlice";

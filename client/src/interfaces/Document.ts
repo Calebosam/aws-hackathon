@@ -2,7 +2,7 @@ export interface FileData {
   created_at: Date;
   description: String;
   file_path: string;
-  file_uid: String;
+  file_uid: string;
   num_downloads: Number;
   num_emails_sent: Number;
   title: String;
