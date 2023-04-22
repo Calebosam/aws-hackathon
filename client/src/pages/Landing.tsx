@@ -1,11 +1,10 @@
 import { Fragment, useState } from "react";
 import { useDispatch } from "react-redux";
 import logo from "../assets/logo_alt.svg";
-import { copy, folder, gift, location, mail, music, notebook, picture, shield } from "../assets/hero";
+import { copy, folder, gift, mail, music, notebook, picture, shield } from "../assets/hero";
 
 //Interal function import
-import { onLogin } from "../api/auth";
-import { authenticateUser, loginUser } from "../redux/slices/authSlice";
+import { loginUser } from "../redux/slices/authSlice";
 
 function LandingPage() {
   const [values, setValues] = useState({
@@ -19,7 +18,7 @@ function LandingPage() {
   const dispatch = useDispatch<any>()
   const onSubmit = async (e: any) => {
     e.preventDefault();
-    dispatch(loginUser(values))
+    await dispatch(loginUser(values))
   };
 
   const onChange = (e: any) => {

@@ -6,7 +6,7 @@ import { useCallback, useEffect } from "react";
 import Landing from "./pages/Landing";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
-import { getUser } from "./redux/slices/authSlice";
+import { getDocuments } from "./redux/slices/authSlice";
 
 const ProtectedRoutes = () => {
   const { isLoggedIn } = useSelector((state: any) => state); // Save state to storage
@@ -20,7 +20,7 @@ const RestrictedRoutes = () => {
 function App() {
   const dispatch = useDispatch<any>();
   const initApp = useCallback(async () => { // Move to the dashboard
-    await dispatch(getUser());
+    await dispatch(getDocuments());
   }, [dispatch]);
 
   useEffect(() => {

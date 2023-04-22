@@ -20,7 +20,7 @@ exports.sendEmailConfirmation = async (name, email, confirmationCode) => {
         html: `<h1>Email Confirmation</h1>
         <h2>Hello ${name}</h2>
         <p>Thank you for subscribing. Please confirm your email by clicking on the following link</p>
-        <a href=http://localhost:8000/verify-email/${confirmationCode}> Click here</a>
+        <a target="_blank" href=http://localhost:8000/api/verify-email/${confirmationCode}> Click here</a>
         </div>`,
     }).catch(err => console.log(err));
 }
@@ -32,7 +32,7 @@ exports.sendFileUtility = async (name, email, attachment, fileTitle) => {
         subject: fileTitle,
         html: `<h1>${name} shared this file with you.</h1>
         <h2>Hi there,</h2>
-        <p>You have received a file from <a href="http://localhost:${CLIENT_PORT}">Lizo File Server</a>. </p>
+        <p>You have received a file from <a target="_blank" href="http://localhost:${CLIENT_PORT}">Lizo File Server</a>. </p>
         </div>`,
         attachments: [attachment]
     }).catch(err => console.log(err));

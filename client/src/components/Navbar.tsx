@@ -2,19 +2,22 @@ import { useState } from "react";
 import logo from "../assets/logo_alt.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { logOutUser } from "../redux/slices/authSlice";
+import { FileData } from "../interfaces/Document";
 
 type Props = {
-    showModal: Function;
-}
+  showModal: Function;
+  state: {
+    query: string;
+    files: any;
+  };
+  setState: Function;
+};
 
-export const Navbar = ({showModal}: Props) => {
-    const dispatch = useDispatch<any>();
-    const { user } = useSelector((state: any) => state);
-
-    
+export const Navbar = ({ showModal, state, setState }: Props) => {
+  const dispatch = useDispatch<any>();
+  const { files } = useSelector((state: any) => state);
+  const { user } = useSelector((state: any) => state);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    
-    
 
   const logout = async () => {
     try {
@@ -22,6 +25,20 @@ export const Navbar = ({showModal}: Props) => {
     } catch (error: any) {
       console.error(error.response);
     }
+  };
+
+  const search = async (e: any) => {
+    const results = files.filter((file: FileData) => {
+      return file.title.toLowerCase().includes(e.target.value.toLowerCase());
+    });
+
+    setState((currentState: typeof state) => {
+      return {
+        ...currentState,
+        query: e.target.value,
+        files: results,
+      };
+    });
   };
   return (
     <div className="navbar w-full flex items-center justify-between pt-8 pb-2">
@@ -52,6 +69,8 @@ export const Navbar = ({showModal}: Props) => {
         <input
           className="w-full bg-transparent font-normal py-2 px-3 text-center"
           type="search"
+          onChange={(e) => search(e)}
+          value={state.query}
           name="search_document"
           id="search_ducoment"
           placeholder="Search all documents..."
@@ -85,7 +104,10 @@ export const Navbar = ({showModal}: Props) => {
               <div className="arrow_box px-4 py-2 rounded">
                 {user.is_admin ? (
                   <div>
-                    <span className="px-4 text-sm py-2 cursor-pointer flex items-center" onClick={() => showModal(setIsDropdownOpen(!isDropdownOpen))}>
+                    <span
+                      className="px-4 text-sm py-2 cursor-pointer flex items-center"
+                      onClick={() => showModal(setIsDropdownOpen(!isDropdownOpen))}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"

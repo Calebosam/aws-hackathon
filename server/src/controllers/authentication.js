@@ -40,12 +40,12 @@ exports.login = async (req, res) => {
     const { user } = req
 
     const payload = {
-        id: user.user_uid,
-        firstName: user.first_name,
-        lastName: user.last_name,
+        user_uid: user.user_uid,
+        first_name: user.first_name,
+        last_name: user.last_name,
         email: user.email,
-        isVerified: user.is_verified,
-        isAdmin: user.is_admin,
+        is_verified: user.is_verified,
+        is_admin: user.is_admin,
         createdAt: user.created_at,
         updatedAt: user.updated_at
     }
@@ -55,7 +55,8 @@ exports.login = async (req, res) => {
 
         return res.status(res.statusCode).cookie('token', token, { /* maxAge: 5000, */ httpOnly: true }).json({ // Remember to set the cookie secure to true.
             success: true,
-            message: 'Logged in successfully.'
+            message: 'Logged in successfully.',
+            user: payload,
         })
     } catch (error) {
         console.error(error.message);
@@ -92,14 +93,18 @@ exports.logout = async (req, res) => {
 
 //Verify Email
 exports.verifyEmail = async (req, res) => {
+    const { user_uid } = req.user;
+    console.log(`Verifying email${user_uid}`)
     try {
-        const { user_uid } = req.user;
         await db.query('UPDATE users SET verification_token = null, is_verified = true WHERE user_uid = $1', [user_uid])
 
-        return res.status(res.statusCode).json({
+        return res.writeHead(301, {
+            Location: `http://localhost:5173/dashboard`
+        }).end();
+        /* return res.status(res.statusCode).json({
             success: true,
             message: 'Email verified'
-        })
+        }) */
     } catch (error) {
         console.error(error.message)
     }

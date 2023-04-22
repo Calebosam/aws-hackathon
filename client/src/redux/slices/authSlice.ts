@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { onRegister, onLogin, fetchCurrentUser, onLogout } from "../../api/auth";
+import { onRegister, onLogin, onLogout } from "../../api/auth";
 import { User } from "../../interfaces/User";
 import { getDocumentsData } from "../../api/docs";
 import { FileData } from "../../interfaces/Document";
@@ -35,21 +35,21 @@ export const registerUser = createAsyncThunk<User | any, Object>("user/registerU
 export const loginUser = createAsyncThunk<Object, string | Object>("user/loginUser", async (data, thunkAPI) => {
   try {
     const response = await onLogin(data);
+    console.log(response.data.user)
+    thunkAPI.dispatch(setUserData(response.data.user));
     thunkAPI.dispatch(authenticateUser(true));
+    thunkAPI.dispatch(awaitValidation(false));
     return response.data;
   } catch (error: any) {
     return thunkAPI.rejectWithValue({ error });
   }
 });
 
-export const getUser = createAsyncThunk<void>("user/getCurrentUser", async (_, thunkAPI) => {
+export const getDocuments = createAsyncThunk<void>("user/getCurrentUser", async (_, thunkAPI) => {
   try {
-    const response = await fetchCurrentUser();
+    const response = await getDocumentsData();
     if (response.data) {
-      thunkAPI.dispatch(authenticateUser(true));
-      thunkAPI.dispatch(setUserData(response.data));
-      const filesData = await getDocumentsData();
-      thunkAPI.dispatch(setFilesData(filesData.data.data));
+      thunkAPI.dispatch(setFilesData(response.data.data));
     } else {
       thunkAPI.dispatch(authenticateUser(false));
       return;
@@ -63,15 +63,11 @@ export const logOutUser = createAsyncThunk<void>("user/logout", async (_, thunkA
   try {
     await onLogout();
     thunkAPI.dispatch(authenticateUser(false));
+    thunkAPI.dispatch(resetUser(null));
   } catch (error: any) {
     return thunkAPI.rejectWithValue({ error });
   }
 });
-
-const userAuthFromLocalStorage = () => {
-  const isAuth = localStorage.getItem("isAuth");
-  return isAuth && JSON.parse(isAuth) === true ? true : false;
-};
 
 const authSlice = createSlice({
   name: "auth",
@@ -89,8 +85,11 @@ const authSlice = createSlice({
     setFilesData: (state, action) => {
       state.files = action.payload;
     },
+    resetUser: (state, action) => {
+      state.user = action.payload;
+    },
   },
 });
 
-export const { authenticateUser, setUserData, awaitValidation, setFilesData } = authSlice.actions;
+export const { authenticateUser, setUserData, awaitValidation, setFilesData, resetUser } = authSlice.actions;
 export default authSlice.reducer;
