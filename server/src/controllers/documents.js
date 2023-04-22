@@ -14,9 +14,7 @@ exports.getDocuments = async (req, res) => {
 
 exports.postDocument = async (req, res) => {
     if (!req.files) {
-        //throw new Error('No files added')
         return res.status(404).json({ message: 'No files added' })
-
     }
     const file = req.files.document;
     const fileName = file.name;
@@ -90,7 +88,6 @@ exports.sendFile = async (req, res) => {
         await sendFileUtility(name, recipientEmail, attachment, file.rows[0].title)
 
         let count = file.rows[0].num_emails_sent + 1;
-        console.log(count, file.rows[0])
         await db.query('UPDATE files SET num_emails_sent = $1 WHERE file_uid = $2', [count, file_uid])
 
         console.log('File sent successfully')

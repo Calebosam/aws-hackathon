@@ -1,5 +1,6 @@
 const passport = require('passport');
 const { Strategy } = require('passport-jwt');
+const jwt = require('jsonwebtoken');
 const { SECRET } = require('../constants');
 const db = require('../db');
 
@@ -17,7 +18,8 @@ const options = {
 }
 
 passport.use(
-    new Strategy(options, async ({ id }, done) => {
+    new Strategy(options, async (req, done) => {
+        const id = req.user_uid
         try {
             const { rows } = await db.query("SELECT user_uid, first_name, last_name, email, is_verified, is_admin, created_at, updated_at FROM users WHERE user_uid = $1", [id])
             if (!rows.length) { 

@@ -31,6 +31,7 @@ function Dashboard() {
         </div>
 
         {isModalOpen ? <UploadFile isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}></UploadFile> : ""}
+        <div className="copy text-center mt-8 pb-4">© 2023 Lizo, Inc.</div>
       </div>
     </Fragment>
   );

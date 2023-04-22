@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useSelector, useDispatch } from "react-redux";
 import { onUpload } from "../api/docs";
-import { getUser } from "../redux/slices/authSlice";
+import { getDocuments } from "../redux/slices/authSlice";
 
 const baseStyle = {
   flex: 1,
@@ -103,7 +103,7 @@ export const UploadFile = ({ isModalOpen, setIsModalOpen }: Props) => {
 
       await onUpload(formData);
       setIsModalOpen(!isModalOpen);
-      await dispatch(getUser());
+      await dispatch(getDocuments());
     }
   };
 
