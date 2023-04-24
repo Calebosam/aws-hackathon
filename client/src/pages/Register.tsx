@@ -1,37 +1,57 @@
-import { Fragment, useState } from "react";
+import { ChangeEvent, FormEvent, Fragment, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import emailIcon from '../assets/undraw_mail_sent_re_0ofv.svg'
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import emailIcon from "../assets/undraw_mail_sent_re_0ofv.svg";
 
 //Function imports
-import { onRegister } from "../api/auth";
 import { registerUser } from "../redux/slices/authSlice";
 
 function Register() {
-  const dispatch = useDispatch<any>()
+  const dispatch = useDispatch<any>();
 
   const { isAwaitingVerification } = useSelector((state: any) => state);
-  console.log(isAwaitingVerification)
   const [values, setValues] = useState({
     first_name: "",
     last_name: "",
     email: "",
     password: "",
   });
-  const [isError, setIsError] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
 
-  const onSubmit = async (e: any) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      console.log(values);
-      const result = await dispatch(registerUser(values));
-      console.log(result);
-    } catch (error: any) {
-      console.error(error.response);
+
+    const toastId = toast("Trying to register...", { autoClose: false, isLoading: true });
+
+    const response = await dispatch(registerUser(values));
+    console.log(response)
+
+    if (response.payload.success) { 
+      console.log(response)
+      toast.update(toastId, {
+        type: toast.TYPE.SUCCESS, autoClose: 100, render: () => {
+        return <p>Done!</p>
+      },})
+    }
+
+    if (response.error) {
+      toast.update(toastId, {
+        render: () => (
+          <div>
+            <h2 className="font-bold text-xl m-0 p-0">Invalid email or password!</h2>
+            <p className="text-sm m-0 p-0">Please check your credentials and try again.</p>
+          </div>
+        ),
+        isLoading: false,
+        type: toast.TYPE.ERROR,
+        //Here the magic
+        className: "rotateY animated",
+        autoClose: 5000,
+      });
     }
   };
 
-  const onChange = (e: any) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
@@ -103,16 +123,18 @@ function Register() {
                   </a>
                 </p>
               </form>
-            </div>) : (
-              <div className="content w-full text-slate-950 text-center flex flex-col items-center">
-                <img src={emailIcon} alt="Verification email sent." width='120p' />
-                <h2 className="mt-6 text-2xl font-bold">Registration successful!</h2>
-                <p>Email verification sent to your email address</p>
-              </div>
-            )
-          }
+            </div>
+          ) : (
+            <div className="content w-full text-slate-950 text-center flex flex-col items-center">
+              <img src={emailIcon} alt="Verification email sent." width="120p" />
+              <h2 className="mt-6 text-2xl font-bold">Registration successful!</h2>
+              <p>Email verification sent to your email address</p>
+            </div>
+          )}
         </div>
       </div>
+
+      <ToastContainer bodyClassName="toast" limit={2} />
     </Fragment>
   );
 }

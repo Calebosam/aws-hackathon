@@ -25,7 +25,22 @@ exports.sendEmailConfirmation = async (name, email, confirmationCode) => {
     }).catch(err => console.log(err));
 }
 
-exports.sendFileUtility = async (name, email, attachment, fileTitle) => {
+exports.sendPasswordResetLink = async (name, email, token, user_uid) => {
+    await transport.sendMail({
+        from: `Lizo File Server <${EMAIL_ADDRESS}>`,
+        to: email,
+        subject: 'Password Reset Request',
+        html: `<h1>Hi ${name},</h1>
+        <h2>you requested to change your password.</h2>
+        <p>Follow the link below to reset your password.
+        If you did not make this request, please ignore this message.
+        <br />
+        <a target="_blank" href="http://localhost:${CLIENT_PORT}/resetPassword?token=${token}&id=${user_uid}">Reset password</a>. </p>
+        </div>`,
+    })
+}
+
+exports.sendFile = async (name, email, attachment, fileTitle) => {
     await transport.sendMail({
         from: `Lizo File Server <${EMAIL_ADDRESS}>`,
         to: email,

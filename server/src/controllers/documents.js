@@ -1,6 +1,6 @@
 const fs = require('fs');
 const db = require('../db');
-const { sendFileUtility } = require('../utilities/nodemailer')
+const { sendFile } = require('../utilities/nodemailer')
 
 exports.getDocuments = async (req, res) => {
     try {
@@ -85,7 +85,7 @@ exports.sendFile = async (req, res) => {
             path
         }
 
-        await sendFileUtility(name, recipientEmail, attachment, file.rows[0].title)
+        await sendFile(name, recipientEmail, attachment, file.rows[0].title)
 
         let count = file.rows[0].num_emails_sent + 1;
         await db.query('UPDATE files SET num_emails_sent = $1 WHERE file_uid = $2', [count, file_uid])

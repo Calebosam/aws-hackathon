@@ -6,6 +6,7 @@ import { useCallback, useEffect } from "react";
 import Landing from "./pages/Landing";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import { ResetPassword } from "./pages/ResetPassword";
 import { getDocuments } from "./redux/slices/authSlice";
 
 const ProtectedRoutes = () => {
@@ -19,7 +20,8 @@ const RestrictedRoutes = () => {
 
 function App() {
   const dispatch = useDispatch<any>();
-  const initApp = useCallback(async () => { // Move to the dashboard
+  const initApp = useCallback(async () => {
+    // Move to the dashboard
     await dispatch(getDocuments());
   }, [dispatch]);
 
@@ -36,6 +38,7 @@ function App() {
         <Route element={<RestrictedRoutes />}>
           <Route path="/" element={<Landing />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/resetPassword" element={<ResetPassword />} />
         </Route>
       </Routes>
     </BrowserRouter>
