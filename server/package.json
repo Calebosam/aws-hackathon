@@ -5,6 +5,8 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.ts",
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
     "start": "node server.ts"
   },
   "author": "Mayor Charles Biney",
