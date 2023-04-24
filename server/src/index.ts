@@ -35,5 +35,5 @@ const startServer = () => {
       console.error("Error:", error.message);
     }
 };
-startServer()
-//export default startServer;
+
+export default startServer;
