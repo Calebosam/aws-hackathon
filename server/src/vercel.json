@@ -1,6 +1,5 @@
 {
   "version": 2,
   "installCommand": "npm install",
-  "cleanUrls": true,
-  "outputDirectory": "bin"
+  "cleanUrls": true
 }
