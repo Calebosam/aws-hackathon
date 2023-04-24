@@ -1,5 +1,5 @@
-/* import dotenv from 'dotenv'
-dotenv.config() */
+import * as dotenv from 'dotenv'
+dotenv.config()
 
 export default {
     // Database variables 
