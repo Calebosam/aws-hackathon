@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "buildCommand": "tsc --build",
   "installCommand": "npm install",
   "cleanUrls": true
 }
