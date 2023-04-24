@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { onDelete, onDownload, onSendFile } from "../api/docs";
 import { useDispatch, useSelector } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { onDelete, onDownload, onSendFile } from "../api/docs";
 import { copy } from "../assets/hero";
 import { FileData } from "../interfaces/Document";
 import Moment from "moment";
@@ -21,8 +23,44 @@ export const Files = ({ state, setState }: Props) => {
   const [recipientEmail, setRecipientEmail] = useState("");
 
   const downloadFile = async (id: string, name: string) => {
+    const downloadingFileToast = toast("Downloading file...", { autoClose: false, isLoading: true });
+
     name = name.replace(/^.*[\\\/]/, "");
-    await onDownload(id, name);
+    await onDownload(id, name)
+    .then((response) => {
+      if (response.status === 200) {
+        toast.update(downloadingFileToast, {
+          render: () => (
+            <div>
+              <h2 className="font-bold text-xl m-0 p-0">File Downloaded!</h2>
+              <p className="text-sm m-0 p-0">Thank you for saving our file.</p>
+            </div>
+          ),
+          isLoading: false,
+          type: toast.TYPE.SUCCESS,
+          //Here the magic
+          className: "rotateY animated",
+          autoClose: 5000,
+        });
+      }
+    })
+    .catch((err) => {
+      const { error } = err.response.data;
+      //console.log(error);
+      toast.update(downloadingFileToast, {
+        render: () => (
+          <div>
+            <h2 className="font-bold text-sm m-0 p-0">{error}!</h2>
+          </div>
+        ),
+        isLoading: false,
+        type: toast.TYPE.ERROR,
+        //Here the magic
+        className: "rotateY animated",
+        autoClose: 5000,
+      });
+    });;
+    
     let copy = [...state.files];
     copy = copy.map((file) => {
       if (file.file_uid === id) {
@@ -41,13 +79,50 @@ export const Files = ({ state, setState }: Props) => {
 
   const sendFile = async (e: any, id: string) => {
     e.preventDefault();
+
+    const sendFileToast = toast("Sending file...", { autoClose: false, isLoading: true });
+
     const data = {
       user_uid: user.user_uid,
       file_uid: id,
       recipientEmail,
     };
 
-    await onSendFile(data);
+    await onSendFile(data)
+      .then((response) => {
+        if (response.status === 200) {
+          toast.update(sendFileToast, {
+            render: () => (
+              <div>
+                <h2 className="font-bold text-xl m-0 p-0">File sent!</h2>
+                <p className="text-sm m-0 p-0">Thank you for sharing our file.</p>
+              </div>
+            ),
+            isLoading: false,
+            type: toast.TYPE.SUCCESS,
+            //Here the magic
+            className: "rotateY animated",
+            autoClose: 5000,
+          });
+        }
+      })
+      .catch((err) => {
+        const { error } = err.response.data;
+        //console.log(error);
+        toast.update(sendFileToast, {
+          render: () => (
+            <div>
+              <h2 className="font-bold text-sm m-0 p-0">{error}!</h2>
+            </div>
+          ),
+          isLoading: false,
+          type: toast.TYPE.ERROR,
+          //Here the magic
+          className: "rotateY animated",
+          autoClose: 5000,
+        });
+      });
+
     setRecipientEmail("");
     let copy = [...state.files];
     copy = copy.map((file) => {
@@ -297,6 +372,8 @@ export const Files = ({ state, setState }: Props) => {
           </div>
         );
       })}
+
+      <ToastContainer bodyClassName="toast" limit={2} />
     </div>
   );
 };

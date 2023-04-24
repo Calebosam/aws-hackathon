@@ -1,6 +1,6 @@
-const db = require('../db');
+import db from '../db';
 
-exports.verifyResetToken = async (req, res, next) => {
+export const verifyResetToken = async (req, res, next) => {
     const { token, id, password } = req.body;
     if (password.length < 6 || password.lenngth > 12) {
         return res.status(400).json({

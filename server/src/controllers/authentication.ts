@@ -1,13 +1,14 @@
-const db = require('../db');
-const { hash } = require('bcryptjs')
-const { sign } = require('jsonwebtoken')
-const { SECRET } = require('../constants')
-const { sendEmailConfirmation, sendPasswordResetLink } = require('../utilities/nodemailer')
+import db from '../db';
+import { hash } from 'bcrypt'
+import { sign } from'jsonwebtoken'
+import { Key } from 'jwt-promisify'
+import constants from '../constants'
+import  { sendEmailConfirmation, sendLink } from '../utilities/nodemailer'
 
 //Get all users
-exports.getUsers = async (req, res) => {
+export const getUsers = async (req, res) => {
     try {
-        const { rows } = await db.query("SELECT user_uid, first_name, last_name, email, is_verified, verification_token, reset_password_token, reset_password_token_expiry, is_admin, created_at, updated_at FROM users")
+        const { rows } = await db.query("SELECT user_uid, first_name, last_name, email, is_verified, verification_token, reset_password_token, reset_password_token_expiry, is_admin, created_at, updated_at FROM users",[])
         res.status(res.statusCode).json({ success: true, users: rows })
     } catch (error) {
         res.status(res.statusCode).json({ message: error.message })
@@ -15,10 +16,10 @@ exports.getUsers = async (req, res) => {
 }
 
 //Register user
-exports.register = async (req, res) => {
+export const register = async (req, res) => {
     const { first_name, last_name, email, password } = req.body;
     try {
-        const verificationToken = await sign({ email }, SECRET)
+        const verificationToken = sign({ email }, constants.SECRET as Key)
         await sendEmailConfirmation(`${first_name} ${last_name}`, email, verificationToken);
 
         const hashedPassword = await hash(password, 10);
@@ -34,7 +35,7 @@ exports.register = async (req, res) => {
 }
 
 //Login user
-exports.login = async (req, res) => {
+export const login = async (req, res) => {
     const { user } = req
 
     const payload = {
@@ -49,7 +50,7 @@ exports.login = async (req, res) => {
     }
 
     try {
-        const token = await sign(payload, SECRET)
+        const token = sign(payload, constants.SECRET as Key)
 
         return res.status(res.statusCode).cookie('token', token, { /* maxAge: 5000, */ httpOnly: true }).json({ // Remember to set the cookie secure to true.
             success: true,
@@ -64,7 +65,7 @@ exports.login = async (req, res) => {
 }
 
 //Get  current user information
-exports.getCurrentUser = async (req, res) => {
+export const getCurrentUser = async (req, res) => {
     try {
         const user = await req.user
         return res.status(res.statusCode).json(user);
@@ -76,7 +77,7 @@ exports.getCurrentUser = async (req, res) => {
 }
 
 //Logout user
-exports.logout = async (req, res) => {
+export const logout = async (req, res) => {
     try {
         return res.status(res.statusCode).clearCookie('token', { httpOnly: true }).json({
             success: true,
@@ -90,7 +91,7 @@ exports.logout = async (req, res) => {
 }
 
 //Verify Email
-exports.verifyEmail = async (req, res) => {
+export const verifyEmail = async (req, res) => {
     const { user_uid } = req.user;
     try {
         await db.query('UPDATE users SET verification_token = null, is_verified = true WHERE user_uid = $1', [user_uid])
@@ -112,17 +113,17 @@ function addMinutes(date, minutes) {
     return date;
 }
 
-exports.sendPasswordResetLink = async (req, res) => {
+export const sendPasswordResetLink = async (req, res) => {
     const payload = {
         email: req.body.email,
         id: req.body.user_uid,
     }
-    const token = await sign(payload, SECRET)
+    const token = sign(payload, constants.SECRET as Key)
     const tokenExpiry = new Date(addMinutes(new Date(), 30))
     const name = `${req.body.first_name} ${req.body.last_name}`
 
     try {
-        await sendPasswordResetLink(name, req.body.email, token, req.body.user_uid)
+        await sendLink(name, req.body.email, token, req.body.user_uid)
         await db.query('UPDATE users SET reset_password_token = $1, reset_password_token_expiry = $2 WHERE user_uid = $3', [token, tokenExpiry, req.body.user_uid])
         return res.status(res.statusCode).json({ success: true, message: 'password reset link sent. Please check your email and follow the instructions.' })
     } catch (error) {
@@ -130,7 +131,7 @@ exports.sendPasswordResetLink = async (req, res) => {
     }
 }
 
-exports.resetPassword = async (req, res) => {
+export const resetPassword = async (req, res) => {
     const { password, id } = req.body
     try {
         const hashedPassword = await hash(password, 10);

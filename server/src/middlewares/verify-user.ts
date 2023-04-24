@@ -1,6 +1,6 @@
-const db = require('../db')
+import db from '../db'
 
-exports.verifyUser = async (req, res, next) => {
+export const verifyUser = async (req, res, next) => {
     const { email } = req.body
     const { rows } = await db.query('SELECT * FROM users WHERE email = $1', [email]);
 

@@ -16,8 +16,8 @@ export async function onDownload(id: String, name: string) {
     method: "GET",
     responseType: "blob",
   }).then((response) => {
-    console.log(response);
     fileDownload(response.data, name)
+    return response
   });
 }
 
