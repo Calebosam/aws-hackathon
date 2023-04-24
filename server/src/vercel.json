@@ -1,16 +1,6 @@
 {
   "version": 2,
+  "buildCommand": "tsc --build",
   "installCommand": "npm install",
-  "builds": [
-    {
-      "src": "*.ts",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/"
-    }
-  ]
+  "cleanUrls": true
 }
