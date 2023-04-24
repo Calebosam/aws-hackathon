@@ -72,29 +72,35 @@ export const onSendFile = async (req, res) => {
     const { file_uid } = req.body
     const { recipientEmail } = req.body
     try {
-        const file = await db.query('SELECT * FROM files WHERE file_uid = $1', [file_uid]);
-        const user = await db.query('SELECT * FROM users WHERE user_uid = $1', [user_uid]);
-        if (!file.rows) throw new Error('File not found');
-        if (!user.rows) throw new Error('Sender not found');
+      const file = await db.query("SELECT * FROM files WHERE file_uid = $1", [file_uid]);
+      const user = await db.query("SELECT * FROM users WHERE user_uid = $1", [user_uid]);
+      if (!file.rows) throw new Error("File not found");
+      if (!user.rows) throw new Error("Sender not found");
 
-        const name = `${user.rows[0].first_name} ${user.rows[0].last_name}`
-        const filename = file.rows[0].file_path.replace(/^.*[\\\/]/, "");
-        const path = file.rows[0].file_path;
-        const attachment = {
-            filename,
-            path
-        }
+      const name = `${user.rows[0].first_name} ${user.rows[0].last_name}`;
+      const filename = file.rows[0].file_path.replace(/^.*[\\\/]/, "");
+      const path = file.rows[0].file_path;
+      const attachment = {
+        filename,
+        path,
+      };
 
-        await sendFile(name, recipientEmail, attachment, file.rows[0].title)
-
-        let count = file.rows[0].num_emails_sent + 1;
-        await db.query('UPDATE files SET num_emails_sent = $1 WHERE file_uid = $2', [count, file_uid])
-
-        console.log('File sent successfully')
-        return res.status(res.statusCode).json({
-            success: true,
-            message: 'File sent successfully',
+      await sendFile(name, recipientEmail, attachment, file.rows[0].title)
+        .then((response) => {
+          return response;
         })
+        .catch((err) => {
+          return err;
+        }); // Fix wrong email address issues from response.
+
+      let count = file.rows[0].num_emails_sent + 1;
+      await db.query("UPDATE files SET num_emails_sent = $1 WHERE file_uid = $2", [count, file_uid]);
+
+      console.log("File sent successfully");
+      return res.status(res.statusCode).json({
+        success: true,
+        message: "File sent successfully",
+      });
     } catch (error) {
         console.error(error.message)
     }

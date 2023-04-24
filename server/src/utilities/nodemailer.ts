@@ -35,7 +35,7 @@ export const sendEmailConfirmation = async (name: string, email: string, confirm
         <a target="_blank" href=http://localhost:8000/api/verify-email/${confirmationCode}> Click here</a>
         </div>`,
     })
-    .catch((err) => console.log(err));
+    .catch((err) => err);
 };
 
 export const sendLink = async (name: string, email: string, token: string, user_uid: string) => {
@@ -50,7 +50,8 @@ export const sendLink = async (name: string, email: string, token: string, user_
         <br />
         <a target="_blank" href="http://localhost:${constants.CLIENT_PORT}/resetPassword?token=${token}&id=${user_uid}">Reset password</a>. </p>
         </div>`,
-  });
+  })
+    .catch(err=>err);
 };
 
 export const sendFile = async (name: string, email: string, attachment, fileTitle: string) => {
@@ -65,5 +66,5 @@ export const sendFile = async (name: string, email: string, attachment, fileTitl
         </div>`,
       attachments: [attachment],
     })
-    .catch((err) => console.log(err));
+    .catch((err) => err);
 };

@@ -60,7 +60,7 @@ export const Files = ({ state, setState }: Props) => {
         autoClose: 5000,
       });
     });;
-    
+
     let copy = [...state.files];
     copy = copy.map((file) => {
       if (file.file_uid === id) {
@@ -141,10 +141,48 @@ export const Files = ({ state, setState }: Props) => {
   };
 
   const deleteFile = async (id: String) => {
-    await onDelete(id);
+    const deleteFileToast = toast("Deleting file...", { autoClose: false, isLoading: true });
+
+    await onDelete(id)
+      .then((response) => {
+        if (response.status === 200) {
+          toast.update(deleteFileToast, {
+            render: () => (
+              <div>
+                <h2 className="font-bold text-sm m-0 p-0">File removed successfully!</h2>
+              </div>
+            ),
+            isLoading: false,
+            type: toast.TYPE.SUCCESS,
+            //Here the magic
+            className: "rotateY animated",
+            autoClose: 5000,
+          });
+        }
+      })
+      .catch((err) => {
+        const { error } = err.response.data;
+        //console.log(error);
+        toast.update(deleteFileToast, {
+          render: () => (
+            <div>
+              <h2 className="font-bold text-sm m-0 p-0">{error}!</h2>
+            </div>
+          ),
+          isLoading: false,
+          type: toast.TYPE.ERROR,
+          //Here the magic
+          className: "rotateY animated",
+          autoClose: 5000,
+        });
+      });
+
     let copy = [...state.files];
     copy = copy.filter((x) => x.file_uid !== id);
-    setState(copy);
+    setState({
+      query: "",
+      files: copy,
+    });
     await dispatch(getDocuments());
   };
 
@@ -229,7 +267,7 @@ export const Files = ({ state, setState }: Props) => {
                         />
                       </svg>
                     </span>
-                    <span title="Delete file" onClick={() => deleteFile(file.file_uid)}>
+                    <span className="cursor-pointer" title="Delete file" onClick={() => deleteFile(file.file_uid)}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
