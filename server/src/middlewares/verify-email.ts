@@ -1,7 +1,7 @@
-const db = require('../db');
+import db from '../db';
 
 //Email token middleware
-exports.verifyTokenMiddleware = async (req, res, next) => {
+export const verifyTokenMiddleware = async (req, res, next) => {
     console.log('hi')
     try {
         const { token } = req.params;

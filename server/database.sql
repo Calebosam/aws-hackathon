@@ -19,6 +19,7 @@ CREATE TABLE users
 );
 
 -- ALTER TABLE users ALTER verification_token TYPE VARCHAR(255);
+-- ALTER TABLE users ALTER reset_password_token TYPE VARCHAR(255);
 -- alter table users alter verification_token drop not null;
 
 CREATE TABLE files

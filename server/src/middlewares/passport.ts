@@ -1,8 +1,7 @@
-const passport = require('passport');
-const { Strategy } = require('passport-jwt');
-const jwt = require('jsonwebtoken');
-const { SECRET } = require('../constants');
-const db = require('../db');
+import passport from 'passport';
+import { Strategy, StrategyOptions } from 'passport-jwt';
+import constants  from '../constants';
+import db from '../db';
 
 const cookieExtractor = (req) => {
     let token = null
@@ -12,8 +11,8 @@ const cookieExtractor = (req) => {
     return token
 }
 
-const options = {
-    secretOrKey: SECRET,
+const options: StrategyOptions = {
+    secretOrKey: constants.SECRET,
     jwtFromRequest: cookieExtractor,
 }
 

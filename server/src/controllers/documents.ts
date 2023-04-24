@@ -1,10 +1,10 @@
-const fs = require('fs');
-const db = require('../db');
-const { sendFileUtility } = require('../utilities/nodemailer')
+import fs from 'fs';
+import db from '../db';
+import { sendFile } from '../utilities/nodemailer'
 
-exports.getDocuments = async (req, res) => {
+export const getDocuments = async (req, res) => {
     try {
-        const { rows } = await db.query('SELECT * FROM files')
+        const { rows } = await db.query('SELECT * FROM files',[])
         return res.status(res.statusCode).json({ success: true, data: rows })
     } catch (error) {
         console.error(error.message);
@@ -12,7 +12,7 @@ exports.getDocuments = async (req, res) => {
     }
 }
 
-exports.postDocument = async (req, res) => {
+export const postDocument = async (req, res) => {
     if (!req.files) {
         return res.status(404).json({ message: 'No files added' })
     }
@@ -36,7 +36,7 @@ exports.postDocument = async (req, res) => {
     }
 }
 
-exports.deleteFile = async (req, res) => {
+export const deleteFile = async (req, res) => {
     const { id } = req.params;
     try {
         const { rows } = await db.query('SELECT file_path FROM files WHERE file_uid = $1', [id])
@@ -55,7 +55,7 @@ exports.deleteFile = async (req, res) => {
     }
 }
 
-exports.downloadFile = async (req, res) => {
+export const downloadFile = async (req, res) => {
     const { id } = req.params
     try {
         const { rows } = await db.query('SELECT * FROM files WHERE file_uid = $1', [id])
@@ -67,34 +67,40 @@ exports.downloadFile = async (req, res) => {
     }
 }
 
-exports.sendFile = async (req, res) => {
+export const onSendFile = async (req, res) => {
     const { user_uid } = req.body
     const { file_uid } = req.body
     const { recipientEmail } = req.body
     try {
-        const file = await db.query('SELECT * FROM files WHERE file_uid = $1', [file_uid]);
-        const user = await db.query('SELECT * FROM users WHERE user_uid = $1', [user_uid]);
-        if (!file.rows) throw new Error('File not found');
-        if (!user.rows) throw new Error('Sender not found');
+      const file = await db.query("SELECT * FROM files WHERE file_uid = $1", [file_uid]);
+      const user = await db.query("SELECT * FROM users WHERE user_uid = $1", [user_uid]);
+      if (!file.rows) throw new Error("File not found");
+      if (!user.rows) throw new Error("Sender not found");
 
-        const name = `${user.rows[0].first_name} ${user.rows[0].last_name}`
-        const filename = file.rows[0].file_path.replace(/^.*[\\\/]/, "");
-        const path = file.rows[0].file_path;
-        const attachment = {
-            filename,
-            path
-        }
+      const name = `${user.rows[0].first_name} ${user.rows[0].last_name}`;
+      const filename = file.rows[0].file_path.replace(/^.*[\\\/]/, "");
+      const path = file.rows[0].file_path;
+      const attachment = {
+        filename,
+        path,
+      };
 
-        await sendFileUtility(name, recipientEmail, attachment, file.rows[0].title)
-
-        let count = file.rows[0].num_emails_sent + 1;
-        await db.query('UPDATE files SET num_emails_sent = $1 WHERE file_uid = $2', [count, file_uid])
-
-        console.log('File sent successfully')
-        return res.status(res.statusCode).json({
-            success: true,
-            message: 'File sent successfully',
+      await sendFile(name, recipientEmail, attachment, file.rows[0].title)
+        .then((response) => {
+          return response;
         })
+        .catch((err) => {
+          return err;
+        }); // Fix wrong email address issues from response.
+
+      let count = file.rows[0].num_emails_sent + 1;
+      await db.query("UPDATE files SET num_emails_sent = $1 WHERE file_uid = $2", [count, file_uid]);
+
+      console.log("File sent successfully");
+      return res.status(res.statusCode).json({
+        success: true,
+        message: "File sent successfully",
+      });
     } catch (error) {
         console.error(error.message)
     }

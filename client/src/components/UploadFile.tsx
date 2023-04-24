@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useSelector, useDispatch } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { onUpload } from "../api/docs";
 import { getDocuments } from "../redux/slices/authSlice";
 
@@ -92,6 +94,9 @@ export const UploadFile = ({ isModalOpen, setIsModalOpen }: Props) => {
   const [isFileErrorMessage, setFileErrorMessage] = useState(false);
   const uploadFile = async (e: any) => {
     e.preventDefault();
+
+    const uploadFileToast = toast("Uploading file...", { autoClose: false, isLoading: true });
+
     if (!acceptedFiles[0]) {
       setFileErrorMessage(true);
     } else {
@@ -101,7 +106,40 @@ export const UploadFile = ({ isModalOpen, setIsModalOpen }: Props) => {
       formData.append("description", documentToUpload.description);
       formData.append("document", acceptedFiles[0]);
 
-      await onUpload(formData);
+      await onUpload(formData)
+      .then((response) => {
+        if (response.status === 200) {
+          toast.update(uploadFileToast, {
+            render: () => (
+              <div>
+                <h2 className="font-bold text-sm m-0 p-0">File Uploaded!</h2>
+              </div>
+            ),
+            isLoading: false,
+            type: toast.TYPE.SUCCESS,
+            //Here the magic
+            className: "rotateY animated",
+            autoClose: 5000,
+          });
+        }
+      })
+      .catch((err) => {
+        const { error } = err.response.data;
+        //console.log(error);
+        toast.update(uploadFileToast, {
+          render: () => (
+            <div>
+              <h2 className="font-bold text-sm m-0 p-0">{error}!</h2>
+            </div>
+          ),
+          isLoading: false,
+          type: toast.TYPE.ERROR,
+          //Here the magic
+          className: "rotateY animated",
+          autoClose: 5000,
+        });
+      });;;
+
       setIsModalOpen(!isModalOpen);
       await dispatch(getDocuments());
     }
