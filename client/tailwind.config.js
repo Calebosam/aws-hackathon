@@ -10,7 +10,7 @@ module.exports = {
         'dark-grey': '#161d28'
       },
       backgroundImage: {
-        'register-bg': 'url(./src/assets/register-bg.jpg)',
+        'register-bg': 'url(./assets/register-bg.jpg)',
       }
     },
     container: {
