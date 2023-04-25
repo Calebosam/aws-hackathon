@@ -12,6 +12,7 @@ export async function onUpload(uploadData: {}) {
 }
 
 export async function onDownload(id: String, name: string) {
+  console.log(`http://${config.HOST}:${config.SERVER_PORT}/api/download/${id}`)
   return await axios({
     url: `http://${config.HOST}:${config.SERVER_PORT}/api/download/${id}`,
     method: "GET",

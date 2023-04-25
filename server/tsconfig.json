@@ -1,6 +1,6 @@
 {
-    "compilerOptions": { /* Docs: [https://www.typescriptlang.org/tsconfig](https://www.typescriptlang.org/tsconfig) */
-      "target": "ES2020",
+    "compilerOptions": {
+      /* Docs: [https://www.typescriptlang.org/tsconfig](https://www.typescriptlang.org/tsconfig) */ "target": "ES2020",
       "module": "commonjs",
       "outDir": "bin",
       "rootDir": "src",
@@ -10,18 +10,15 @@
       "checkJs": true,
       "allowJs": true,
       "moduleResolution": "node",
-      "types": [
-        "node"
-      ],
-      "lib": [
-        "es6"
-      ],
+      "types": ["node"],
+      "lib": ["es6"],
+      "typeRoots": ["./node_modules/@types", "./src/types"],
       "esModuleInterop": true,
       "skipLibCheck": true,
       "forceConsistentCasingInFileNames": true,
       "allowUnreachableCode": true,
-       "useUnknownInCatchVariables": false,  // TypeScript 4.4+ only!
-  },
+      "useUnknownInCatchVariables": false // TypeScript 4.4+ only!
+    },
     "include": [
       "src/**/*.ts",
       "src/**/*.js",
