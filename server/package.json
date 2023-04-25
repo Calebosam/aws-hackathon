@@ -7,7 +7,7 @@
     "dev": "nodemon server.ts",
     "build": "tsc --build",
     "clean": "tsc --build --clean",
-    "start": "node server.ts"
+    "start": "nodemon server.ts"
   },
   "author": "Mayor Charles Biney",
   "license": "ISC",
