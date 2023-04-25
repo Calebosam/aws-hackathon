@@ -17,4 +17,4 @@ router.post('/resetpassword', verifyResetToken, resetPassword)
 router.post('/login', loginValidation, validationMiddleware, login);
 router.get('/logout', logout);
 
-module.exports = router
+export = router
