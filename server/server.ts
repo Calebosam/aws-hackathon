@@ -8,7 +8,7 @@ import cors from 'cors';
 
 const app = express();
 //Passport middleware
-//require('./middlewares/passport')
+require('./src/middlewares/passport')
 
 //Innitialize middleware
 app.use(express.json());

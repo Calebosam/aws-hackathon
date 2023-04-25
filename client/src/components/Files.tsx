@@ -45,12 +45,11 @@ export const Files = ({ state, setState }: Props) => {
       }
     })
     .catch((err) => {
-      const { error } = err.response.data;
-      //console.log(error);
+      console.log(err);
       toast.update(downloadingFileToast, {
         render: () => (
           <div>
-            <h2 className="font-bold text-sm m-0 p-0">{error}!</h2>
+            <h2 className="font-bold text-sm m-0 p-0">!</h2>
           </div>
         ),
         isLoading: false,

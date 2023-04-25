@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { BrowserRouter, Navigate, Routes, Route, Outlet } from "react-router-dom";
+import { HashRouter, Navigate, Routes, Route, Outlet } from "react-router-dom";
 import { useCallback, useEffect } from "react";
 
 // Import layouts
@@ -30,18 +30,19 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
-        <Route element={<ProtectedRoutes />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Route>
         <Route element={<RestrictedRoutes />}>
           <Route path="/" element={<Landing />} />
           <Route path="/register" element={<Register />} />
           <Route path="/resetPassword" element={<ResetPassword />} />
+          <Route path="*" element={<Landing />} />
+        </Route>
+        <Route element={<ProtectedRoutes />}>
+          <Route path="/dashboard" element={<Dashboard />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

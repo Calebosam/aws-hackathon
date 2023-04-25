@@ -103,7 +103,7 @@ function LandingPage() {
               admission forms, and more with just a few clicks.
             </p>
             <div className="mt-8 flex items-center">
-              <a href="/register" className="hover:text-white">
+              <a href="#/register" className="hover:text-white">
                 <button
                   type="button"
                   className="mr-10 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:from-pink-500 hover:to-green-500"
@@ -111,7 +111,7 @@ function LandingPage() {
                   Get Started
                 </button>
               </a>
-              <a href="" className="flex underline">
+              <a href="#/" className="flex underline">
                 Learn more
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -167,7 +167,7 @@ function LandingPage() {
                   </button>
                   <p className="text-[14px] leading-none">
                     Don't have an account yet? <br />
-                    <a href="/register" className="underline">
+                    <a href="#/register" className="underline">
                       Sign up
                     </a>{" "}
                     now.

@@ -118,7 +118,7 @@ function Register() {
                 </button>
                 <p className="max-w-lg mt-5">
                   Already have an account?{" "}
-                  <a href="/" className="text-emerald-700 underline">
+                  <a href="#/" className="text-emerald-700 underline">
                     Log in here
                   </a>
                 </p>

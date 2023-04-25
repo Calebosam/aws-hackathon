@@ -1,6 +1,6 @@
 export default {
-    NODE_ENV: import.meta.env.NODE_ENV,
+    NODE_ENV: import.meta.env.VITE_NODE_ENV,
     // Server variables
-    HOST: import.meta.env.HOST,
-    SERVER_PORT: import.meta.env.SERVER_PORT,
+    HOST: import.meta.env.VITE_HOST,
+    SERVER_PORT: import.meta.env.VITE_SERVER_PORT,
 }

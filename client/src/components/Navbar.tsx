@@ -79,7 +79,7 @@ export const Navbar = ({ showModal, state, setState }: Props) => {
 
       <div className="user_controls flex items-center">
         <p>
-          Howdy <span className="font-bold text-2xl">{user.first_name + " " + user.last_name}</span>
+          Howdy, <span className="font-bold text-2xl">{user.first_name + " " + user.last_name}</span>
         </p>
         <div className="avatar ml-3 relative">
           <span className="relative" id="avatar" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
