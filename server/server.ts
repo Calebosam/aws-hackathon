@@ -1,5 +1,32 @@
-import app from "./src";
-import constants from "./src/constants";
+import express from 'express';
+import upload from 'express-fileupload';
+import constants from './src/constants';
+import cookieParser from 'cookie-parser'
+import passport from 'passport';
+import cors from 'cors';
+
+
+const app = express();
+//Passport middleware
+//require('./middlewares/passport')
+
+//Innitialize middleware
+app.use(express.json());
+app.use(upload());
+app.use(cookieParser())
+app.use(cors({ origin: `http://${constants.HOST}:${constants.CLIENT_PORT}`, credentials: true }))
+app.use(passport.initialize());
+
+//Import routes from routes folder
+import authRoutes from './src/routes/authentication';
+import docRoutes from './src/routes/documents';
+
+//Initialize routes
+app.use('/api', authRoutes)
+app.use('/api', docRoutes);
+
+// Start server
+
 
 const startServer = () => {
   try {

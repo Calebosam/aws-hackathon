@@ -9,4 +9,4 @@ router.get('/download/:id', userAuthentication, downloadFile);
 router.post('/send', userAuthentication, onSendFile)
 router.delete('/delete/:id', userAuthentication, deleteFile);
 
-module.exports = router
+export = router;

@@ -35,7 +35,6 @@ export const registerUser = createAsyncThunk<User | any, Object>("user/registerU
 export const loginUser = createAsyncThunk<Object, string | Object>("user/loginUser", async (data, thunkAPI) => {
   try {
     const response = await onLogin(data);
-    console.log(response.data.user)
     thunkAPI.dispatch(setUserData(response.data.user));
     thunkAPI.dispatch(authenticateUser(true));
     thunkAPI.dispatch(awaitValidation(false));

@@ -27,7 +27,7 @@ function Dashboard() {
           <div className="flex items-center justify-center py-12 my-10 rounded-2xl bg-[antiquewhite]">
             <img src={dash} alt="dash" width="30%" />
           </div>
-          {state.files.length > 1 ? (
+          {state.files.length > 0 ? (
             <Files state={state} setState={setState}></Files>
           ) : (
             <div className="flex item-center justify-center p-40">

@@ -4,7 +4,7 @@ import { sendFile } from '../utilities/nodemailer'
 
 export const getDocuments = async (req, res) => {
     try {
-        const { rows } = await db.query('SELECT * FROM files',[])
+        const { rows } = await db.query('SELECT * FROM files')
         return res.status(res.statusCode).json({ success: true, data: rows })
     } catch (error) {
         console.error(error.message);
