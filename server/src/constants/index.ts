@@ -13,10 +13,13 @@ export default {
     SERVER_PORT: process.env.SERVER_PORT,
     CLIENT_PORT: process.env.CLIENT_PORT,
     SECRET: process.env.SECRET,
+    CLIENT_HOST: process.env.HOST,
+    SERVER_HOST: process.env.HOST,
 
     // Misc variables
     EMAIL_SMTP: process.env.EMAIL_SMTP,
     EMAIL_ADDRESS: process.env.EMAIL_ADDRESS,
     EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
     SMTP_PORT: process.env.SMTP_PORT,
+    NODE_ENV: process.env.NODE_ENV,
 }
