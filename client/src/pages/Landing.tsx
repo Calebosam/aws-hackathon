@@ -66,7 +66,7 @@ function LandingPage() {
 
   return (
     <Fragment>
-      <div className="design w-full h-full absolute z-[-1] hidden">
+      <div className="design w-full h-full absolute z-[-1] hidden lg:block">
         <img src={copy} alt="Something" className="h-40 absolute right-[15%] top-[75%] animate-pulse slow" />
         <img src={mail} alt="Something" className="h-40 absolute right-[35%] top-[70%] animate-pulse slow" />
         <img src={picture} alt="Something" className="h-40 absolute left-[43%] top-[44%] animate-pulse slow" />
