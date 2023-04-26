@@ -146,7 +146,7 @@ export const UploadFile = ({ isModalOpen, setIsModalOpen }: Props) => {
   };
 
   return (
-    <div className="w-screen h-screen fixed top-0 bg-[white] flex justify-center items-center">
+    <div className="min-w-screen min-h-screen w-full h-full px-8 fixed top-0 bg-[white] flex justify-center items-center">
       <div className="fixed right-[5%] top-[5%]">
         <button className="p-1" type="button" onClick={() => setIsModalOpen(!isModalOpen)}>
           <svg
@@ -162,9 +162,9 @@ export const UploadFile = ({ isModalOpen, setIsModalOpen }: Props) => {
         </button>
       </div>
 
-      <form onSubmit={(e) => uploadFile(e)} className="w-[520px]">
+      <form onSubmit={(e) => uploadFile(e)} className="sm:w-[520px]">
         <h2 className="text-5xl font-bold">Upload File</h2>
-        <div {...getRootProps({ style, className: "flex-col" })}>
+        <div {...getRootProps({ style, className: "flex-col items-center justify-center h-[80px]" })}>
           <input
             {...getInputProps({
               type: "file",
@@ -202,7 +202,7 @@ export const UploadFile = ({ isModalOpen, setIsModalOpen }: Props) => {
         <textarea
           value={documentToUpload.description}
           onChange={(e) => setDocumentToUpload({ ...documentToUpload, description: e.target.value })}
-          className="rounded min-h-[240px] w-[100%] mb-4 p-3 bg-transparent border-2"
+          className="rounded sm:min-h-[240px] min-h-[140px] w-[100%] mb-4 p-3 bg-transparent border-2"
           name="description"
           id="description"
           maxLength={170}

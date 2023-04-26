@@ -57,16 +57,16 @@ function Register() {
 
   return (
     <Fragment>
-      <div className="w-screen h-screen bg-white flex">
-        <div className="left w-[50vw] bg-register-bg bg-cover  bg-left bg-no-repeat"></div>
-        <div className="right w-[50vw] p-48 bg-[#fbfaff] flex items-center justify-center">
+      <div className="w-full h-full min-h-screen min-w-screen p-8 md:p-0 bg-white flex bg-[#fbfaff]">
+        <div className="left w-[50vw] bg-register-bg bg-cover bg-left bg-no-repeat hidden md:block"></div>
+        <div className="right md:w-[50vw] md:p-10 xl:p-48 flex items-center justify-center">
           {!isAwaitingVerification ? (
-            <div className="content w-full text-slate-950">
-              <h1 className="font-bold text-7xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-pink-700">
+            <div className="content w-full text-slate-950 md:text-left text-center">
+              <h1 className="font-bold sm:text-7xl mt-4 md:mt-0 bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-pink-700">
                 Sign up
               </h1>
-              <p className="max-w-xl mt-6">
-                <span className="font-bold text-2xl leading-10">Welcome to Lizo File Server!</span> <br />
+              <p className="max-w-xl md:mt-6 mt-4">
+                <span className="font-bold text-2xl sm:leading-10">Welcome to Lizo File Server!</span> <br />
                 To get started, fill this form and verify your account via a confirmation code to your email. Once
                 you're verified, you can browse and download important documents, search our file server, and share
                 files directly to any email.
@@ -80,7 +80,7 @@ function Register() {
                   onChange={(e) => onChange(e)}
                   value={values.first_name}
                   required
-                  className="bg-transparent mt-8 border-2 border-transparent w-full px-4 border-b-gray-400 font-[600]"
+                  className="bg-transparent mt-8 border text-center md:text-left border-transparent w-full px-4 border-b-gray-400 font-[600]"
                 />
                 <input
                   type="text"
@@ -89,7 +89,7 @@ function Register() {
                   onChange={(e) => onChange(e)}
                   value={values.last_name}
                   required
-                  className="bg-transparent mt-8 border-2 border-transparent w-full px-4 border-b-gray-400 font-[600]"
+                  className="bg-transparent mt-8 border text-center md:text-left border-transparent w-full px-4 border-b-gray-400 font-[600]"
                 />
                 <input
                   type="text"
@@ -98,7 +98,7 @@ function Register() {
                   onChange={(e) => onChange(e)}
                   value={values.email}
                   required
-                  className="bg-transparent mt-8 border-2 border-transparent w-full px-4 border-b-gray-400 font-[600]"
+                  className="bg-transparent mt-8 border text-center md:text-left border-transparent w-full px-4 border-b-gray-400 font-[600]"
                 />
                 <input
                   type="password"
@@ -107,7 +107,7 @@ function Register() {
                   onChange={(e) => onChange(e)}
                   value={values.password}
                   required
-                  className="bg-transparent mt-8 border-2 border-transparent w-full px-4 border-b-gray-400 font-[600]"
+                  className="bg-transparent mt-8 border text-center md:text-left border-transparent w-full px-4 border-b-gray-400 font-[600]"
                 />
                 <br />
                 <button

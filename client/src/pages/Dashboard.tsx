@@ -24,8 +24,8 @@ function Dashboard() {
         <div className="container md:px-4">
           <Navbar showModal={showModal} state={state} setState={setState}></Navbar>
 
-          <div className="flex items-center justify-center py-12 my-10 rounded-2xl bg-[antiquewhite]">
-            <img src={dash} alt="dash" width="30%" />
+          <div className="flex items-center justify-center py-12 my-4 sm:my-10 rounded-2xl bg-[antiquewhite]">
+            <img src={dash} alt="dash" className="h-[100px]" />
           </div>
           {state.files.length > 0 ? (
             <Files state={state} setState={setState}></Files>
