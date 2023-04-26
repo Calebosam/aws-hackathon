@@ -99,7 +99,7 @@ export const verifyEmail = async (req, res) => {
     try {
         await db.query('UPDATE users SET verification_token = null, is_verified = true WHERE user_uid = $1', [user_uid])
         return res.writeHead(301, {
-            Location: `${constants.CLIENT_HOST}${clientPort}/dashboard`
+            Location: `${constants.CLIENT_HOST}${clientPort}`
         }).end();
         /* return res.status(res.statusCode).json({
             success: true,
