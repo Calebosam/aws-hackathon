@@ -4,6 +4,7 @@ import constants from "../constants";
 import { Attachment } from "nodemailer/lib/mailer";
 
 const SMTPPort: number = parseInt(constants.SMTP_PORT!);
+
 let serverPort: number | string;
 constants.NODE_ENV === "production" ? (serverPort = "") : (serverPort = `:${constants.SERVER_PORT}`!);
 

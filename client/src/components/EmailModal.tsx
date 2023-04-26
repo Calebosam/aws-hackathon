@@ -72,7 +72,7 @@ export const EmailModal = ({ isModalOpen, setIsModalOpen }: Props) => {
       </div>
 
       <img src={forgotImg} alt="Forgot password" width="200px" />
-      <form onSubmit={(e) => sendResetLink(e)} className="flex flex-col w-[420px] mt-8">
+      <form onSubmit={(e) => sendResetLink(e)} className="flex flex-col px-6 sm:w-[420px] mt-8">
         <h2 className="text-3xl text-center font-bold">Forgot your password?</h2>
 
         <p className="text-center">
@@ -82,7 +82,7 @@ export const EmailModal = ({ isModalOpen, setIsModalOpen }: Props) => {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="bg-transparent p-3 rounded-full border mt-3 text-center"
+          className="bg-transparent p-4 rounded-full border mt-3 text-center"
           placeholder="Email"
           required
         />

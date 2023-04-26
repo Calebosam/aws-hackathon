@@ -41,17 +41,17 @@ export const Navbar = ({ showModal, state, setState }: Props) => {
     });
   };
   return (
-    <div className="navbar w-full flex items-center justify-between pt-8 pb-2">
-      <div className="logo flex items-end">
-        <img src={logo} alt="Lizo File Server Logo" className="h-[46px] mr-1" />
-        <h3 className="text-4xl font-[1000] tracking-wide leading-[0.3]">
+    <div className="navbar w-full flex flex-col-reverse px-8 sm:px-0 sm:flex-row items-center justify-between pt-5 sm:pt-8 pb-2">
+      <div className="logo flex items-end justify-center mt-5 sm:mt-0">
+        <img src={logo} alt="Lizo File Server Logo" className="sm:h-[46px] h-[52px] mr-1" />
+        <h3 className="sm:text-4xl text-5xl font-bold sm:font-[1000] tracking-wide sm:leading-[0.3] leading-[0.3]">
           IZO
           <br />
-          <small className="text-[9px] font-normal">FILE SERVER</small>
+          <small className="text-[12px] sm:text-[8px] font-normal"> FILE SERVER</small>
         </h3>
       </div>
 
-      <div className="search rounded-full border border-2 min-w-[35%] flex items-center px-4">
+      <div className="search rounded-full border border-2 sm:max-w-[40%] md:min-w-[45%] w-full flex items-center my-5 sm:my-0 px-4">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

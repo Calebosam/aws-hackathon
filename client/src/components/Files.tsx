@@ -211,23 +211,23 @@ export const Files = ({ state, setState }: Props) => {
   };
 
   return (
-    <div className="flex flex-wrap iems-center justify-between w-full">
+    <div className="flex flex-wrap iems-center sm:justify-center lg:justify-between w-full px-5 sm:px-0">
       {state.files.map((file: FileData, index: any) => {
         return (
           <div
-            className="w-[460px] min-w-[32%] h-[260px] flex flex-col justify-between border-2 rounded-xl px-5 py-3 my-4 transition"
+            className="sm:w-[460px] sm:min-w-[32%] sm:h-[260px] flex flex-col justify-between border sm:border-2 rounded-xl px-5 py-3 my-4 transition"
             key={index}
           >
             <div className="flex justify-between">
               <div className="title mb-2 flex items-center">
-                <div className="w-[45px] h-[45px] bg-gray-200 p-2 rounded-full mr-3">
+                <div className="sm:w-[45px] sm:h-[45px] w-[45px] sm:bg-gray-200 p-1 rounded-full mr-3">
                   <img src={copy} alt="notebook" />
                 </div>
-                <h1 className="text-xl font-bold leading-4">
+                <h2 className="sm:text-xl font-bold leading-4">
                   {file.title}
                   <br />
                   <span className="text-xs font-normal">{Moment(file.created_at).format("Do MMM")}</span>
-                </h1>
+                </h2>
               </div>
 
               {user.is_admin ? (
@@ -289,7 +289,7 @@ export const Files = ({ state, setState }: Props) => {
               )}
             </div>
             <div className="desc mb-2">
-              <span>{file.description.substring(0, 170)}...</span>
+              <span className="text-sm sm:text-lg">{file.description.substring(0, 170)}...</span>
             </div>
             <div className="w-full h-[40px] actions relative flex justify-between items-center overflow-hidden">
               {user.is_admin ? (
