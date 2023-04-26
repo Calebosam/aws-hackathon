@@ -5,6 +5,9 @@ import { Key } from 'jwt-promisify'
 import constants from '../constants'
 import  { sendEmailConfirmation, sendLink } from '../utilities/nodemailer'
 
+let clientPort: number | string;
+constants.NODE_ENV === "production" ? (clientPort = "") : (clientPort = `:${constants.CLIENT_PORT}`!);
+
 //Get all users
 export const getUsers = async (req, res) => {
     try {
@@ -96,7 +99,7 @@ export const verifyEmail = async (req, res) => {
     try {
         await db.query('UPDATE users SET verification_token = null, is_verified = true WHERE user_uid = $1', [user_uid])
         return res.writeHead(301, {
-            Location: `http://localhost:5173/dashboard`
+            Location: `http://${constants.CLIENT_HOST}${clientPort}/dashboard`
         }).end();
         /* return res.status(res.statusCode).json({
             success: true,

@@ -3,33 +3,36 @@ import config from '../config'
 import { ResetPasswordModule } from "../interfaces/ResetPassword";
 axios.defaults.withCredentials = true;
 
+let serverPort: number | string;
+config.NODE_ENV === "production" ? (serverPort = "") : (serverPort = `:${config.SERVER_PORT}`!);
+
 export async function onRegister(registrationData: {}) {
-  return await axios.post(`http://${config.HOST}:${config.SERVER_PORT}/api/register`, registrationData);
+  return await axios.post(`http://${config.HOST}${serverPort}/api/register`, registrationData);
 }
 
 export async function onLogin(loginData: {}) {
-  return await axios.post(`http://${config.HOST}:${config.SERVER_PORT}/api/login`, loginData);
+  return await axios.post(`http://${config.HOST}${serverPort}/api/login`, loginData);
 }
 
 export async function onLogout() {
-  return await axios.get(`http://${config.HOST}:${config.SERVER_PORT}/api/logout`);
+  return await axios.get(`http://${config.HOST}${serverPort}/api/logout`);
 }
 
 interface Email{
   email: string;
 }
 export async function onResetpasswordRequest(email: Email) {
-  return await axios.post(`http://${config.HOST}:${config.SERVER_PORT}/api/requestpasswordreset`, email)
+  return await axios.post(`http://${config.HOST}${serverPort}/api/requestpasswordreset`, email)
 }
 
 export async function onResetPassword(data: ResetPasswordModule) {
-  return await axios.post(`http://${config.HOST}:${config.SERVER_PORT}/api/resetpassword`, data)
+  return await axios.post(`http://${config.HOST}${serverPort}/api/resetpassword`, data)
 }
 
 /* export async function fetchCurrentUser() {
-  return await axios.get(`http://${config.HOST}:${config.SERVER_PORT}/api/currentuser`);
+  return await axios.get(`http://${config.HOST}${serverPort}/api/currentuser`);
 } */
 
 /* export async function fetchDocuments() {
-  return await axios.get(`http://${config.HOST}:${config.SERVER_PORT}/api/documents`);
+  return await axios.get(`http://${config.HOST}${serverPort}/api/documents`);
 } */
