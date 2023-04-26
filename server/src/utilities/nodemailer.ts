@@ -40,7 +40,7 @@ export const sendEmailConfirmation = async (name: string, email: string, confirm
       html: `<h1>Email Confirmation</h1>
         <h2>Hello ${name}</h2>
         <p>Thank you for subscribing. Please confirm your email by clicking on the following link</p>
-        <a target="_blank" href=http://${constants.SERVER_HOST}${serverPort}/api/verify-email/${confirmationCode}> Click here</a>
+        <a target="_blank" href="${constants.SERVER_HOST}${serverPort}/api/verify-email/${confirmationCode}"> Click here</a>
         </div>`,
     })
     .catch((err) => err);
@@ -57,7 +57,7 @@ export const sendLink = async (name: string, email: string, token: string, user_
         <p>Follow the link below to reset your password.
         If you did not make this request, please ignore this message.
         <br />
-        <a target="_blank" href="http://${constants.CLIENT_HOST}${clientPort}/resetPassword?token=${token}&id=${user_uid}">Reset password</a>. </p>
+        <a target="_blank" href="${constants.CLIENT_HOST}${clientPort}/resetPassword?token=${token}&id=${user_uid}">Reset password</a>. </p>
         </div>`,
     })
     .catch((err) => err);
@@ -71,7 +71,7 @@ export const sendFile = async (name: string, email: string, attachment: Attachme
       subject: fileTitle,
       html: `<h1>${name} shared this file with you.</h1>
         <h2>Hi there,</h2>
-        <p>You have received a file from <a target="_blank" href="http://${constants.CLIENT_HOST}${clientPort}">Lizo File Server</a>. </p>
+        <p>You have received a file from <a target="_blank" href="${constants.CLIENT_HOST}${clientPort}">Lizo File Server</a>. </p>
         </div>`,
       attachments: [attachment],
     })

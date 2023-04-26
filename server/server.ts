@@ -6,6 +6,9 @@ import passport from 'passport';
 import cors from 'cors';
 
 
+let clientPort: number | string;
+constants.NODE_ENV === "production" ? (clientPort = "") : (clientPort = `:${constants.CLIENT_PORT}`!);
+
 const app = express();
 //Passport middleware
 require('./src/middlewares/passport')
@@ -14,7 +17,7 @@ require('./src/middlewares/passport')
 app.use(express.json());
 app.use(upload());
 app.use(cookieParser())
-app.use(cors({ origin: `http://${constants.CLIENT_HOST}:${constants.CLIENT_PORT}`, credentials: true }))
+app.use(cors({ origin: `${constants.CLIENT_HOST}${clientPort}`, credentials: true }))
 app.use(passport.initialize());
 
 //Import routes from routes folder

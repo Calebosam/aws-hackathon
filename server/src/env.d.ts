@@ -13,6 +13,8 @@ declare global {
       SERVER_PORT: number | string;
       CLIENT_PORT: number | string;
       SECRET: Key;
+      CLIENT_HOST: string;
+      SERVER_HOST: string;
 
       // Misc variables
       EMAIL_SMTP: string;
