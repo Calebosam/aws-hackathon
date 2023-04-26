@@ -18,7 +18,7 @@ declare global {
       EMAIL_SMTP: string;
       EMAIL_ADDRESS: string;
       EMAIL_PASSWORD: string;
-      SMTP_PORT: number | undefined;
+      SMTP_PORT: string;
     }
   }
 }

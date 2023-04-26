@@ -2,7 +2,7 @@ import fs from 'fs';
 import db from '../db';
 import { sendFile } from '../utilities/nodemailer'
 
-export const getDocuments = async (req, res) => {
+export const getDocuments = async (_req, res) => {
     try {
         const { rows } = await db.query('SELECT * FROM files')
         return res.status(res.statusCode).json({ success: true, data: rows })
@@ -95,8 +95,6 @@ export const onSendFile = async (req, res) => {
 
       let count = file.rows[0].num_emails_sent + 1;
       await db.query("UPDATE files SET num_emails_sent = $1 WHERE file_uid = $2", [count, file_uid]);
-
-      console.log("File sent successfully");
       return res.status(res.statusCode).json({
         success: true,
         message: "File sent successfully",

@@ -14,7 +14,7 @@ require('./src/middlewares/passport')
 app.use(express.json());
 app.use(upload());
 app.use(cookieParser())
-app.use(cors({ origin: `http://${constants.HOST}:${constants.CLIENT_PORT}`, credentials: true }))
+app.use(cors({ origin: `http://${constants.CLIENT_HOST}:${constants.CLIENT_PORT}`, credentials: true }))
 app.use(passport.initialize());
 
 //Import routes from routes folder
