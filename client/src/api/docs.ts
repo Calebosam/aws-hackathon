@@ -7,6 +7,7 @@ let serverPort: number | string;
 config.NODE_ENV === "production" ? (serverPort = "") : (serverPort = `:${config.SERVER_PORT}`!);
 
 export async function getDocumentsData() {
+  console.log(`http://${config.HOST}${serverPort}/api/documents`)
   return await axios.get(`http://${config.HOST}${serverPort}/api/documents`);
 }
 
