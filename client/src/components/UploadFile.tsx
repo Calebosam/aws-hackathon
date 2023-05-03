@@ -92,6 +92,7 @@ export const UploadFile = ({ isModalOpen, setIsModalOpen }: Props) => {
 
   const [documentToUpload, setDocumentToUpload] = useState(document);
   const [isFileErrorMessage, setFileErrorMessage] = useState(false);
+
   const uploadFile = async (e: any) => {
     e.preventDefault();
 
@@ -214,6 +215,8 @@ export const UploadFile = ({ isModalOpen, setIsModalOpen }: Props) => {
           Upload
         </button>
       </form>
+
+      <ToastContainer bodyClassName="toast" limit={2} />
     </div>
   );
 };
