@@ -54,7 +54,6 @@ export const Files = ({ state, setState }: Props) => {
         ),
         isLoading: false,
         type: toast.TYPE.ERROR,
-        //Here the magic
         className: "rotateY animated",
         autoClose: 5000,
       });

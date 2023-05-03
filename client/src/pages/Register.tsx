@@ -44,7 +44,6 @@ function Register() {
         ),
         isLoading: false,
         type: toast.TYPE.ERROR,
-        //Here the magic
         className: "rotateY animated",
         autoClose: 5000,
       });

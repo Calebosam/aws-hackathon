@@ -9,16 +9,19 @@ import { copy, folder, gift, mail, music, notebook, picture, shield } from "../a
 import { loginUser } from "../redux/slices/authSlice";
 import { EmailModal } from "../components/EmailModal";
 
+interface LoginModal {
+  email: string;
+  password: string;
+}
+
 function LandingPage() {
-  const [values, setValues] = useState({
+  const [values, setValues] = useState<LoginModal>({
     email: "",
     password: "",
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
   const dispatch = useDispatch<any>();
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -34,9 +37,8 @@ function LandingPage() {
             <p className="text-sm m-0 p-0">Enjoy our server full of files.</p>
           </div>
         ),
-        isLoading:false,
+        isLoading: false,
         type: toast.TYPE.SUCCESS,
-        //Here the magic
         className: "rotateY animated",
         autoClose: 5000,
       });
@@ -51,9 +53,8 @@ function LandingPage() {
             <p className="text-sm m-0 p-0">Please check your credentials and try again.</p>
           </div>
         ),
-        isLoading:false,
+        isLoading: false,
         type: toast.TYPE.ERROR,
-        //Here the magic
         className: "rotateY animated",
         autoClose: 5000,
       });
