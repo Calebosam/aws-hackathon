@@ -110,7 +110,7 @@ export const Files = ({ state, setState }: Props) => {
         toast.update(sendFileToast, {
           render: () => (
             <div>
-              <h2 className="font-bold text-sm m-0 p-0">{error}!</h2>
+              <h2 className="font-bold text-sm m-0 p-0">{error}Error sending file!</h2>
             </div>
           ),
           isLoading: false,
