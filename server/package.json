@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon server.ts",
+    "prebuild": "mkdir -p uploads",
     "build": "tsc --build",
     "clean": "tsc --build --clean",
     "start": "nodemon server.ts"
