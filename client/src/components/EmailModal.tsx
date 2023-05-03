@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import { FormEvent, useRef } from "react";
 import forgotImg from "../assets/undraw_forgot_password_re_hxwm.svg";
 import { onResetpasswordRequest } from "../api/auth";
 import { toast, ToastContainer } from "react-toastify";
@@ -10,14 +10,17 @@ type Props = {
 };
 
 export const EmailModal = ({ isModalOpen, setIsModalOpen }: Props) => {
-  const [email, setEmail] = useState("");
+  const emailRef = useRef<HTMLInputElement>(null);
 
   const sendResetLink = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const email = {
+      email: emailRef.current?.value!,
+    };
     const requestResetToast = toast("Sending link...", { autoClose: false, isLoading: true });
 
-    await onResetpasswordRequest({ email })
+    await onResetpasswordRequest(email)
       .then((res) => {
         if (res.status === 200) {
           toast.update(requestResetToast, {
@@ -29,9 +32,8 @@ export const EmailModal = ({ isModalOpen, setIsModalOpen }: Props) => {
                 </p>
               </div>
             ),
-            isLoading:false,
+            isLoading: false,
             type: toast.TYPE.SUCCESS,
-            //Here the magic
             className: "rotateY animated",
             autoClose: 5000,
           });
@@ -45,9 +47,8 @@ export const EmailModal = ({ isModalOpen, setIsModalOpen }: Props) => {
               <p className="text-sm m-0 p-0">Please verify your email address and try again.</p>
             </div>
           ),
-          isLoading:false,
+          isLoading: false,
           type: toast.TYPE.ERROR,
-          //Here the magic
           className: "rotateY animated",
           autoClose: 5000,
         });
@@ -79,9 +80,8 @@ export const EmailModal = ({ isModalOpen, setIsModalOpen }: Props) => {
           Enter your email address and we'll send you a link with instructions to reset your password.
         </p>
         <input
+          ref={emailRef}
           type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
           className="bg-transparent p-4 rounded-full border mt-3 text-center"
           placeholder="Email"
           required
