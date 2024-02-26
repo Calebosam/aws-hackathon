@@ -1,6 +1,6 @@
 CREATE DATABASE lizodb;
 
-/* CREATE EXTENSION IF NOT EXISTS "uuid-ossp"; */
+ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE users
 (
@@ -18,9 +18,10 @@ CREATE TABLE users
     updated_at TIMESTAMP NOT NULL DEFAULT now()
 );
 
--- ALTER TABLE users ALTER verification_token TYPE VARCHAR(255);
--- ALTER TABLE users ALTER reset_password_token TYPE VARCHAR(255);
--- alter table users alter verification_token drop not null;
+ALTER TABLE users ALTER verification_token TYPE VARCHAR(255);
+ALTER TABLE users ALTER reset_password_token TYPE VARCHAR(255);
+alter table users alter verification_token drop not null;
+
 
 CREATE TABLE files
 (
@@ -35,8 +36,6 @@ CREATE TABLE files
     user_id UUID REFERENCES users(user_uid) ON DELETE CASCADE
 );
 
---Functions
-/* 
 CREATE FUNCTION check_user_is_admin() RETURNS TRIGGER AS $$
     BEGIN
         IF EXISTS (SELECT 1 FROM users WHERE user_uid = NEW.user_id AND is_admin = true) 
@@ -53,4 +52,3 @@ EXECUTE FUNCTION check_user_is_admin();
 
 
 DROP TRIGGER IF EXISTS enforce_user_is_admin ON files CASCADE;
- */
