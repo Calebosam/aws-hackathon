@@ -8,7 +8,12 @@ To install and run the application, follow these steps:
 
 1. Clone this repository to your local machine.
 2. Install the required dependencies by running `npm install` in both the `client` and `server` directories.
-3. Create a PostgreSQL database and configure the connection string in `.env` file in `server` directory. Example:
+3. Create an env from the sample.env and where `PORT` is not required in deployment leave it as `""`. Example
+```
+CLIENT_PORT = ""
+SERVER_PORT = ""
+```
+4. Create a PostgreSQL database and configure the connection string in `.env` file in `server` directory. Example:
 
 ```
 DB_NAME=your-database-name
@@ -18,9 +23,11 @@ DB_HOST=your-database-host
 DB_PORT=your-database-port
 ```
 
-4. Run the database migrations by running `npm run db:migrate` in the `server` directory.
-5. Start the server by running `npm run dev` in the `server` directory.
-6. Start the client by running `npm run dev` in the `client` directory.
+5. Run the database migrations by running the `database.sql` on the database service of choice.
+6. Start the server by running `npm run dev` in the `server` directory.
+7. Start the client by running `npm run dev` in the `client` directory.
+
+<b><i>NB: Recommended you run the applications as docker containers. Docker files are in the various directories and a Makefile would help to build the Docker Imagees</i></b>
 
 ## Usage
 
